@@ -1,5 +1,7 @@
 package studio6;
 
+import java.util.Arrays;
+
 import edu.princeton.cs.introcs.StdDraw;
 
 public class RecursiveMethods {
@@ -13,9 +15,11 @@ public class RecursiveMethods {
 	 */
 	public static double geometricSum(int n) {
 		
-			// FIXME compute the geometric sum for the first n terms recursively
+		if (n == 0) {
 			return 0;
-		
+		} else {
+			return Math.pow(0.5, n) + geometricSum(n - 1);
+		}
 	}
 
 	/**
@@ -27,13 +31,12 @@ public class RecursiveMethods {
 	 * @return greatest common divisor of p and q
 	 */
 	public static int gcd(int p, int q) {
-		
-			// FIXME compute the gcd of p and q using recursion
-			return 0;
-		
+		if (q == 0) {
+			return p;
+		} else {
+			return gcd(q, p % q);
+		}
 	}
-
-	
 
 	/**
 	 * This method uses recursion to create a reverse of the given array
@@ -42,10 +45,26 @@ public class RecursiveMethods {
 	 * @return an array with the same data as the input but it reverse order
 	 */
 	public static int[] toReversed(int[] array) {
-		
-			// FIXME create a helper method that can recursively reverse the given array
-			return new int[0];
-		
+		int[] reversed = Arrays.copyOf(array, array.length);
+//		int[] reversed = new int[array.length]; // this will create just an empty array, not the copy of the original one.
+		return toReversedHelper(reversed, reversed.length - 1);
+	}
+	
+	public static int[] toReversedHelper(int[] array, int index) {
+		if (index < array.length / 2) {
+			return array;
+		} else {
+			
+			// Setting
+			int lastIndex = array.length - 1;
+			int mirrorIndex = lastIndex - index;
+			
+			// Swap
+			int temp = array[index];
+			array[index] = array[mirrorIndex];
+			array[mirrorIndex] = temp;
+			return toReversedHelper(array, index - 1);
+		}
 	}
 
 	/**
@@ -59,8 +78,12 @@ public class RecursiveMethods {
 	 */
 	public static void circlesUponCircles(double xCenter, double yCenter, double radius,
 			double radiusMinimumDrawingThreshold) {
-		
-		// FIXME
+		if (radius > radiusMinimumDrawingThreshold) {
+			StdDraw.circle(xCenter, yCenter, radius);
+			circlesUponCircles(xCenter, yCenter + radius, radius/3, radiusMinimumDrawingThreshold);
+			circlesUponCircles(xCenter, yCenter - radius, radius/3, radiusMinimumDrawingThreshold);
+			circlesUponCircles(xCenter + radius, yCenter, radius/3, radiusMinimumDrawingThreshold);
+			circlesUponCircles(xCenter - radius, yCenter, radius/3, radiusMinimumDrawingThreshold);
+		}
 	}
-
 }
